@@ -1,0 +1,35 @@
+.about-container {
+    padding: 2rem;
+    color: #333;
+  }
+  
+  .about-header h1 {
+    font-size: 90px;
+    color: coral;
+  }
+  
+  .about-section h2 {
+    font-size: 2rem;
+    margin-top: 1.5rem;
+  }
+  
+  .about-section p {
+    line-height: 1.6;
+    font-size: 20px;
+  }
+  
+  .team {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .team-member {
+    max-width: 300px;
+  }
+  
+  a {
+    color: #2a7f62;
+    text-decoration: none;
+  }
+  

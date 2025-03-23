@@ -1,0 +1,68 @@
+.posts-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 20px;
+  }
+  
+  .post {
+    width: 100%;
+    max-width: 350px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .postImg {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .postInfo {
+    padding: 15px;
+  }
+  
+  .postCats {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .postCat {
+    margin-right: 10px;
+    background-color: #f1f1f1;
+    padding: 5px;
+    border-radius: 4px;
+  }
+  
+  .postTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .postDate {
+    font-size: 0.9rem;
+    color: #888;
+  }
+  
+  .postDesc {
+    font-size: 1rem;
+    margin-top: 10px;
+    color: #444;
+  }
+  
+  .readMoreLink {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    margin-top: 10px;
+    display: inline-block;
+  }
+  
+  .readMoreLink:hover {
+    text-decoration: underline;
+  }
+  
