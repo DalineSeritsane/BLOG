@@ -2,8 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const userRoutes = require('./backendBlog/routes/users');
-const blogRoutes = require('./backendBlog/routes/blogs');
+const userRoutes = require('./routes/users');
+const blogRoutes = require('./routes/blogs');
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use(cors({
 }));
 
 
-const PORT = process.env.PORT || 7412;  // Default to 7412 if PORT is not set
+const PORT = process.env.PORT;  // Default to 7412 if PORT is not set
 
 // Middleware
 app.use(bodyParser.json());  // Parse incoming JSON requests
