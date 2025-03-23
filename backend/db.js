@@ -1,4 +1,4 @@
-require('dotevn').config();
+require('dotenv').config();
 const mysql = require("mysql2");
 const util = require('util');
 

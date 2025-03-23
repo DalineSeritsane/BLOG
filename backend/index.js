@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const cors = require('cors');
 const userRoutes = require('./routes/users');
 const blogRoutes = require('./routes/blogs');
@@ -15,10 +15,10 @@ app.use(cors({
 }));
 
 
-const PORT = process.env.PORT;  // Default to 7412 if PORT is not set
+const PORT = process.env.PORT;  
 
 // Middleware
-app.use(bodyParser.json());  // Parse incoming JSON requests
+// app.use(bodyParser.json());  // Parse incoming JSON requests
 
 // Serve static files (like images) from the uploads folder
 app.use('/uploads', express.static('uploads'));
