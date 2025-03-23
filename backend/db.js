@@ -1,3 +1,4 @@
+require('dotevn').config();
 const mysql = require("mysql2");
 const util = require('util');
 
@@ -9,7 +10,8 @@ const connection = mysql.createConnection({
     database: process.env.DB_NAME,
     port: process.env.DB_PORT,
     connectTimeout: 30000 // Timeout in milliseconds (10 seconds)
-});
+    
+  });
 
 // Convert db.query to a Promise-based function
 const dbQuery = util.promisify(connection.query).bind(connection);
