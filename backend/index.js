@@ -10,9 +10,18 @@ const app = express();
 
 // Enable CORS for specific frontend URL
 app.use(cors({
-  origin: process.env.FRONTEND_URL , // Your frontend URL (Uncomment and modify as needed)
-  credentials: true,
+  origin: process.env.FRONTEND_LOCAL_UR , // Your frontend URL 
+  methods: ['POST', 'GET', 'PUT', 'DELETE'], // Allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'Host', 'User-Agent', 'Accept', 'Accept-Encoding', 'Connection'], // Allowed headers
+  credentials: true, // Enable credentials support
 }));
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 
 const PORT = process.env.PORT;  

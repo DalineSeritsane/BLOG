@@ -17,7 +17,7 @@ const PostDetail = () => {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const response = await axios.get(`http://localhost:7412/api/posts/${id}`);
+        const response = await axios.get(`http://localhost:5000/api/posts/${id}`);
         setBlog(response.data);
         setComments(response.data.comments || []);
       } catch (err) {
@@ -32,7 +32,7 @@ const PostDetail = () => {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:7412/api/posts/${id}/comments`, {
+      const response = await axios.post(`http://localhost:5000/api/posts/${id}/comments`, {
         username,
         comment
       });
@@ -47,7 +47,7 @@ const PostDetail = () => {
   const handleReplySubmit = async (e, commentId) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:7412/api/posts/${id}/comments/${commentId}/reply`, {
+      const response = await axios.post(`http://localhost:5000/api/posts/${id}/comments/${commentId}/reply`, {
         username,
         reply,
       });
@@ -67,7 +67,7 @@ const PostDetail = () => {
 
   const handleDeleteComment = async (commentId) => {
     try {
-      await axios.delete(`http://localhost:7412/api/posts/${id}/comments/${commentId}`);
+      await axios.delete(`http://localhost:5000/api/posts/${id}/comments/${commentId}`);
       setComments(comments.filter(c => c.id !== commentId));
     } catch (err) {
       console.error('Error deleting comment:', err);
@@ -77,7 +77,7 @@ const PostDetail = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
-  const imageUrl = blog && blog.image ? `http://localhost:7412/uploads/${blog.image}` : '';
+  const imageUrl = blog && blog.image ? `http://localhost:5000/uploads/${blog.image}` : '';
 
   return (
     <div className="blog-detail container my-5">
