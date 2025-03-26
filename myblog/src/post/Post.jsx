@@ -17,7 +17,7 @@ function Post() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:7412/api/posts'); // Ensure this route is correct
+        const response = await axios.get(process.env.REACT_APP_API_URL); // Ensure this route is correct
         console.log('Fetched posts:', response.data); // Debugging log
 
         if (Array.isArray(response.data)) {
@@ -47,7 +47,7 @@ function Post() {
   return (
     <div className="posts-container">
       {posts.map((post, index) => {
-        const postImage = post.image ? `http://localhost:7412/uploads/${post.image}` : defaultImages.beach;
+        const postImage = post.image ? `${process.env.REACT_APP_API_URL}/${post.image}` : defaultImages.beach;
 
         return (
           <div className="post" key={index}>

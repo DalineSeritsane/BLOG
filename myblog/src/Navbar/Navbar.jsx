@@ -27,6 +27,9 @@ function Navbar() {
             <Link className="link" to="/write">WRITE</Link>
             </li>
             <li className="navListItem">
+            <Link className="link" to="/createpost">Create Posts</Link>
+            </li>
+            <li className="navListItem">
               {user && "LOGOUT"}
             </li>
         </ul>

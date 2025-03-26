@@ -18,23 +18,24 @@ import { AuthProvider } from "./pages/login/auth/AuthContext";
 
 
 const App =() => {
-  const user = false;
+  
   return (
     <AuthProvider>
     <Router>
       <Navbar />
       <Routes>
-      <Route path="/" exact element={<Home />}></Route> 
+      <Route path="/" element={<Home />}></Route> 
           <Route path="/register" element={ <Register />} />
           <Route path="/login" element={ <Login />} />
           <Route path="/about" element={ <About />} />
           <Route path="/contact" element={ <Contact />} />
           <Route path="/write" element={ <Write />} />
-          <Route path="/setting" element={user ? <Setting /> : <Register/>} ></Route>
+          <Route path="/create-post" element={ <CreatePost />} />
+          <Route path="/setting" element={ <Setting /> }/>
           <Route path="/post/:postid" element={<PostDetail />} />
           <Route path="/single" element={ <Single />} />
-          <Route path="/create-post" element={ <CreatePost />} />
-          <Route path="/post" element={ <ProtectedRoute><Post /></ProtectedRoute>} />
+          <Route path="/post" element={ <Post />} />
+          <Route path="/posts" element={ <ProtectedRoute><Posts /></ProtectedRoute>} />
       </Routes>
     </Router>
     </AuthProvider>

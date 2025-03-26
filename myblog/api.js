@@ -1,7 +1,7 @@
-const API_URL = "http://localhost:7412/api/posts"; // Base API URL
+const API_URL = `${process.env.REACT_APP_API_URL}/api/posts`; // Corrected API URL
 
 const defaultHeaders = {
-  "Content-Type": "application/json",
+  "Content-Type": "application/json", // For JSON requests
 };
 
 // Handle API errors centrally
@@ -13,7 +13,7 @@ const handleErrors = async (response) => {
   return response.json();
 };
 
-//  Fetch all blog posts
+// Fetch all blog posts
 export const fetchBlogs = async () => {
   try {
     const response = await fetch(API_URL);
@@ -23,13 +23,17 @@ export const fetchBlogs = async () => {
   }
 };
 
-//  Create a new blog post
+// Create a new blog post
 export const createBlog = async (blogData) => {
   try {
+    const formData = new FormData();
+    for (const key in blogData) {
+      if (blogData[key]) formData.append(key, blogData[key]);
+    }
+
     const response = await fetch(API_URL, {
       method: "POST",
-      headers: defaultHeaders,
-      body: JSON.stringify(blogData),
+      body: formData, // Sending FormData for image uploads
     });
     return await handleErrors(response);
   } catch (error) {
@@ -37,7 +41,7 @@ export const createBlog = async (blogData) => {
   }
 };
 
-//  Fetch a single blog post by ID
+// Fetch a single blog post by ID
 export const fetchBlogById = async (id) => {
   try {
     const response = await fetch(`${API_URL}/${id}`);
@@ -57,7 +61,7 @@ export const fetchComments = async (blogId) => {
   }
 };
 
-//  Post a new comment
+// Post a new comment
 export const postComment = async (blogId, commentData) => {
   try {
     const response = await fetch(`${API_URL}/${blogId}/comments`, {
