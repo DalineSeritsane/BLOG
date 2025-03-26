@@ -60,6 +60,22 @@ router.get('/posts', async (req, res) => {
   }
 });
 
+// GET /api/posts/:id - Fetch a single post
+router.get('/posts/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const post = await dbQuery('SELECT * FROM posts WHERE id = ?', [id]);
+    if (post.length === 0) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    res.json(post[0]);
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+
 // POST /api/blogs - Create a new blog post with Joi validation
 router.post('/', upload, async (req, res) => {
   const { name, surname, title, content } = req.body;

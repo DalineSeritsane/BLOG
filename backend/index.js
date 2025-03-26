@@ -30,7 +30,8 @@ const PORT = process.env.PORT;
 // app.use(bodyParser.json());  // Parse incoming JSON requests
 
 // Serve static files (like images) from the uploads folder
-app.use('/uploads', express.static('uploads'));
+router.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 
 // Routes for user and blog handling
 app.use('/api', userRoutes);

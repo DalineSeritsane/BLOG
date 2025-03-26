@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import './Createpost.css';
 
 const CreatePost = () => {
     const [formData, setFormData] = useState({
+        name: '',  
+        surname: '',  
         title: '',
-        author: '',
         date: '',
         shortDescription: '',
         content: '',
         image: null,
     });
+
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+    const fileInputRef = useRef(null); // Correctly define ref for file input
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -31,18 +34,28 @@ const CreatePost = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const blogData = new FormData();
+
+        // Append all form fields to FormData
         Object.entries(formData).forEach(([key, value]) => {
             if (value) blogData.append(key, value);
         });
-        blogData.append('comments', JSON.stringify([]));
 
         try {
-            await axios.post('http://localhost:5000/api/posts', blogData, {
-                headers: { 'Content-Type': 'applicationn/json' },
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/posts`, blogData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
             });
+
             setMessage('Blog created successfully!');
             setError('');
-            setFormData({ title: '', author: '', date: '', shortDescription: '', content: '', image: null });
+
+            // Reset form fields
+            setFormData({ name: '', surname: '', title: '', date: '', shortDescription: '', content: '', image: null });
+
+            // Reset file input field
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+
         } catch {
             setError('Error creating blog. Please try again.');
             setMessage('');
@@ -55,19 +68,70 @@ const CreatePost = () => {
             {message && <div className="alert alert-success">{message}</div>}
             {error && <div className="alert alert-danger">{error}</div>}
             <form onSubmit={handleSubmit}>
-                {['title', 'author', 'shortDescription', 'content'].map((field) => (
-                    <div key={field} className="mb-3">
-                        <input
-                            type={field === 'content' || field === 'shortDescription' ? 'textarea' : 'text'}
-                            className="form-control"
-                            name={field}
-                            placeholder={field.replace(/([A-Z])/g, ' $1')}
-                            value={formData[field]}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                ))}
+                {/* Name Field */}
+                <div className="mb-3">
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="name"
+                        placeholder="First Name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                {/* Surname Field */}
+                <div className="mb-3">
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="surname"
+                        placeholder="Last Name"
+                        value={formData.surname}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                {/* Title Field */}
+                <div className="mb-3">
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="title"
+                        placeholder="Title"
+                        value={formData.title}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                {/* Short Description Field */}
+                <div className="mb-3">
+                    <textarea
+                        className="form-control"
+                        name="shortDescription"
+                        placeholder="Short Description"
+                        value={formData.shortDescription}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                {/* Content Field */}
+                <div className="mb-3">
+                    <textarea
+                        className="form-control"
+                        name="content"
+                        placeholder="Content"
+                        value={formData.content}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                {/* Date Field */}
                 <div className="mb-3">
                     <input
                         type="date"
@@ -77,14 +141,19 @@ const CreatePost = () => {
                         onChange={handleChange}
                     />
                 </div>
+
+                {/* Image Upload */}
                 <div className="mb-3">
                     <input
                         type="file"
                         className="form-control"
                         accept="image/*"
+                        ref={fileInputRef} // Attach ref here
                         onChange={handleFileChange}
                     />
                 </div>
+
+                {/* Submit Button */}
                 <button type="submit" className="btn btn-primary w-100">Create Blog Post</button>
             </form>
         </div>

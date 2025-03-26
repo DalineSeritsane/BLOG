@@ -17,7 +17,7 @@ const PostDetail = () => {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/posts/${id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/posts/${id}`);
         setBlog(response.data);
         setComments(response.data.comments || []);
       } catch (err) {
@@ -32,9 +32,9 @@ const PostDetail = () => {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:5000/api/posts/${id}/comments`, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/posts/${id}/comments`, {
         username,
-        comment
+        comment,
       });
       setComments([...comments, response.data]);
       setUsername('');
@@ -47,7 +47,7 @@ const PostDetail = () => {
   const handleReplySubmit = async (e, commentId) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:5000/api/posts/${id}/comments/${commentId}/reply`, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/posts/${id}/comments/${commentId}/reply`, {
         username,
         reply,
       });
@@ -67,7 +67,7 @@ const PostDetail = () => {
 
   const handleDeleteComment = async (commentId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/posts/${id}/comments/${commentId}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/posts/${id}/comments/${commentId}`);
       setComments(comments.filter(c => c.id !== commentId));
     } catch (err) {
       console.error('Error deleting comment:', err);
@@ -77,7 +77,7 @@ const PostDetail = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
-  const imageUrl = blog && blog.image ? `http://localhost:5000/uploads/${blog.image}` : '';
+  const imageUrl = blog && blog.image ? `${process.env.REACT_APP_API_URL}/${blog.image}` : '';
 
   return (
     <div className="blog-detail container my-5">
@@ -85,7 +85,7 @@ const PostDetail = () => {
       <h5 className="text-muted text-center">
         By {blog.author} | {new Date(blog.date).toLocaleDateString()}
       </h5>
-      <img src={imageUrl} alt={blog.title} className="img-fluid my-4" />
+      {blog.image && <img src={imageUrl} alt={blog.title} className="img-fluid my-4" />}
       <p className="lead">{blog.shortDescription}</p>
       <div className="content">
         <h4>Blog Content</h4>
