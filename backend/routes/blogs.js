@@ -90,7 +90,7 @@ router.post('/posts',  async (req, res) => {
     const { name, surname, title, content} = req.body;
     const sql ='INSERT INTO posts (name, surname, title, content) VALUES (?, ?, ?, ?)'; 
     
-    
+    console.log(req.body);
     const result = await dbQuery(sql,[name, surname, title, content]
     ); console.log ("Post insterted successfully:", result);
 
