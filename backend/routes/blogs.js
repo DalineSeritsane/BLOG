@@ -79,9 +79,7 @@ router.get('/posts/:id', async (req, res) => {
 // POST /api/blogs - Create a new blog post with Joi validation
 router.post('/posts',  async (req, res) => {
   const { name, surname, title, content } = req.body;
-  const imageName = req.file ? req.file.filename : '';
-  const date = new Date().toISOString().slice(0, 19).replace('T', ' '); // Correct date format
-
+ 
   // Validate the request body using Joi schema
   const { error } = postSchema.validate(req.body);
   if (error) {
