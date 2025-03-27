@@ -27,11 +27,16 @@ app.use(cors({
       } else {
           callback(new Error('Not allowed by CORS'));
       }
-  }
+  },  credentials: true
 }));
+
+
 
 app.use(express.json());
 
+app.get('/posts', (req, res) => {
+  res.json({ message: 'CORS issue fixed!' });
+});
 const PORT = process.env.PORT;  
 
 // Middleware
