@@ -20,7 +20,7 @@ app.use(cors({
 const PORT = process.env.PORT;  
 
 // Middleware
-app.use(bodyParser.json());  // Optional body parser, if needed
+// app.use(bodyParser.json());  // Optional body parser, if needed
 
 // Serve static files (like images) from the uploads folder
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
