@@ -1,64 +1,102 @@
-import React, { useState, useRef } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import './Createpost.css';
 
 const CreatePost = () => {
-    const [formData, setFormData] = useState({
-        name: '',  
-        surname: '',  
-        title: '',
-        date: '',
-        shortDescription: '',
-        content: '',
-        image: null,
-    });
+    const [name, setName] = useState("");
+    const [surname, setSurname] = useState("");
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [posts, setPosts] = useState([]);
+    const [message, setMessage] = useState("");
+    const [error, setError] = useState("");
 
-    const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
-    const fileInputRef = useRef(null); // Correctly define ref for file input
+    const backendUrl = process.env.REACT_APP_API_URL; 
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
-
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file && !file.type.startsWith("image/")) {
-            setError('Only image files are allowed');
+    useEffect(() => {
+        if (!backendUrl) {
+            console.error("Backend URL is not set.");
+            setError("Backend URL is not set. Please configure REACT_APP_API_URL.");
             return;
         }
-        setFormData((prev) => ({ ...prev, image: file }));
-    };
+    
+        fetch(`${backendUrl}/posts`)
+            .then((response) => response.json())
+            .then((data) => {
+                setPosts(Array.isArray(data) ? data : []);
+            })
+            .catch((error) => {
+                console.error("Error fetching posts:", error);
+                setError("Error fetching posts.");
+            });
+    }, [backendUrl]);
+    
+    // Fetch posts from backend 
+    useEffect(() => {
+        fetch(`${backendUrl}/posts`)
+            .then((response) => response.json())
+            .then((data) => {
+                setPosts(Array.isArray(data) ? data : []);
+            })
+            .catch((error) => {
+                console.error("Error fetching posts:", error);
+                setError("Error fetching posts.");
+            });
+    }, [backendUrl]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const blogData = new FormData();
-
-        // Append all form fields to FormData
-        Object.entries(formData).forEach(([key, value]) => {
-            if (value) blogData.append(key, value);
-        });
-
+    // Add new post function 
+    const handlePost = async () => {
+        if (!name || !surname || !title || !content) {
+            alert("All fields are required.");
+            return;
+        } 
         try {
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/posts`, blogData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+            const response = await fetch(`${backendUrl}/posts`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ name, surname, title, content }),
             });
 
-            setMessage('Blog created successfully!');
-            setError('');
-
-            // Reset form fields
-            setFormData({ name: '', surname: '', title: '', date: '', shortDescription: '', content: '', image: null });
-
-            // Reset file input field
-            if (fileInputRef.current) {
-                fileInputRef.current.value = '';
+            if (response.ok) {
+                const data = await response.json();
+                setPosts((prevPosts) => [
+                    ...prevPosts,
+                    { id: data.postId, name, surname, title, content },
+                ]);
+                setMessage("Blog created successfully!");
+                setError("");
+                setName("");
+                setSurname("");
+                setTitle("");
+                setContent("");
+            } else {
+                const errorData = await response.json();
+                setError(errorData.message || "Failed to add post.");
             }
+        } catch (error) {
+            console.error("Error adding post:", error);
+            setError("Error adding post. Backend error.");
+        }
+    };
 
-        } catch {
-            setError('Error creating blog. Please try again.');
-            setMessage('');
+    // Delete post function 
+    const handleDelete = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this post?")) return;
+
+        try {
+            const response = await fetch(`${backendUrl}/posts/${id}`, {
+                method: "DELETE",
+            });
+
+            if (response.ok) {
+                setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
+            } else {
+                alert("Error deleting post.");
+            }
+        } catch (error) {
+            console.error("Error deleting post:", error);
+            alert("Error deleting post.");
         }
     };
 
@@ -67,16 +105,15 @@ const CreatePost = () => {
             <h2 className="text-center">Create a New Blog</h2>
             {message && <div className="alert alert-success">{message}</div>}
             {error && <div className="alert alert-danger">{error}</div>}
-            <form onSubmit={handleSubmit}>
+            
+            <form>
                 {/* Name Field */}
                 <div className="mb-3">
                     <input
                         type="text"
-                        className="form-control"
-                        name="name"
                         placeholder="First Name"
-                        value={formData.name}
-                        onChange={handleChange}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         required
                     />
                 </div>
@@ -85,11 +122,9 @@ const CreatePost = () => {
                 <div className="mb-3">
                     <input
                         type="text"
-                        className="form-control"
-                        name="surname"
                         placeholder="Last Name"
-                        value={formData.surname}
-                        onChange={handleChange}
+                        value={surname}
+                        onChange={(e) => setSurname(e.target.value)}
                         required
                     />
                 </div>
@@ -98,23 +133,9 @@ const CreatePost = () => {
                 <div className="mb-3">
                     <input
                         type="text"
-                        className="form-control"
-                        name="title"
                         placeholder="Title"
-                        value={formData.title}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                {/* Short Description Field */}
-                <div className="mb-3">
-                    <textarea
-                        className="form-control"
-                        name="shortDescription"
-                        placeholder="Short Description"
-                        value={formData.shortDescription}
-                        onChange={handleChange}
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
                         required
                     />
                 </div>
@@ -122,40 +143,30 @@ const CreatePost = () => {
                 {/* Content Field */}
                 <div className="mb-3">
                     <textarea
-                        className="form-control"
-                        name="content"
-                        placeholder="Content"
-                        value={formData.content}
-                        onChange={handleChange}
+                        placeholder="Write content here..."
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
                         required
                     />
                 </div>
 
-                {/* Date Field */}
-                <div className="mb-3">
-                    <input
-                        type="date"
-                        className="form-control"
-                        name="date"
-                        value={formData.date}
-                        onChange={handleChange}
-                    />
-                </div>
-
-                {/* Image Upload */}
-                <div className="mb-3">
-                    <input
-                        type="file"
-                        className="form-control"
-                        accept="image/*"
-                        ref={fileInputRef} // Attach ref here
-                        onChange={handleFileChange}
-                    />
-                </div>
-
                 {/* Submit Button */}
-                <button type="submit" className="btn btn-primary w-100">Create Blog Post</button>
+                <button type="button" onClick={handlePost}>Create Blog Post</button>
             </form>
+
+            <h3>All Posts</h3>
+            {posts.length === 0 ? (
+                <p>No posts yet</p>
+            ) : (
+                posts.map((post) => (
+                    <div key={post.id}>
+                        <h4>{post.title}</h4>
+                        <p><strong>By:</strong> {post.name} {post.surname}</p>
+                        <p>{post.content}</p>
+                        <button onClick={() => handleDelete(post.id)}>Delete</button>
+                    </div>
+                ))
+            )}
         </div>
     );
 };

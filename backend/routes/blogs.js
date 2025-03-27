@@ -52,11 +52,11 @@ const upload = multer({
 // GET /api/blogs - Fetch all blog posts
 router.get('/posts', async (req, res) => {
   try {
-    const posts = await dbQuery('SELECT * FROM posts ORDER BY date DESC');
-    res.json(posts);
+    const posts = await dbQuery('SELECT * FROM posts');
+    res.json(Array.isArray(posts) ? posts : []);
   } catch (error) {
     console.error('Error fetching posts:', error);
-    res.status(500).json({ error: 'Database error' });
+    res.status(500).json({ error: 'Error fetching posts ' });
   }
 });
 
@@ -77,7 +77,7 @@ router.get('/posts/:id', async (req, res) => {
 
 
 // POST /api/blogs - Create a new blog post with Joi validation
-router.post('/', upload, async (req, res) => {
+router.post('/posts',  async (req, res) => {
   const { name, surname, title, content } = req.body;
   const imageName = req.file ? req.file.filename : '';
   const date = new Date().toISOString().slice(0, 19).replace('T', ' '); // Correct date format
@@ -89,16 +89,43 @@ router.post('/', upload, async (req, res) => {
   }
 
   try {
-    const result = await dbQuery(
-      'INSERT INTO posts (name, surname, title, content, date, image) VALUES (?, ?, ?, ?, ?, ?)',
-      [name, surname, title, content, date, imageName]
-    );
-    res.status(201).json({ message: 'Blog created successfully', blogId: result.insertId });
+    const { name, surname, title, content} = req.body;
+    const sql ='INSERT INTO posts (name, surname, title, content) VALUES (?, ?, ?, ?)'; 
+    
+    
+    const result = await dbQuery(sql,[name, surname, title, content]
+    ); console.log ("Post insterted successfully:", result);
+
+    res.status(201).json({ message: 'Post created successfully', postId: result.insertId });
   } catch (error) {
     console.error('Error creating blog:', error);
     res.status(500).json({ error: 'Database error' });
   }
 });
 
+
+router.delete("/posts/id:", async (req,res) =>{
+  try{
+    const id = parseInt(req.params.id);
+
+    if(!id || isNaN(id)) {
+      return res.status(400).json({message: "Valid post ID is required"});
+    }
+    const checkSql = "SELECT * FROM posts WHERE id = ?";
+    const post = await query(checkSql, [id]);
+    if (post.length === 0) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const deleteSql = "DELETE FROM posts WHERE id = ?";
+    await query(deleteSql, [id]);
+
+    res.json({ message: "Post deleted successfully" });
+
+  } catch (err) {
+    console.error("Error deleting post:", err);
+    res.status(500).json({ message: "Error deleting post", error: err });
+  }
+})
 // Export the router
 module.exports = router;

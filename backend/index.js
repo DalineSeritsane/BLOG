@@ -9,7 +9,7 @@ const app = express();
 
 // Enable CORS for specific frontend URL
 app.use(cors({
-  origin: process.env.FRONTEND_LOCAL_URL, // Corrected typo here
+  origin: process.env. FRONTEND_URL,  // Corrected typo here
   methods: ['POST', 'GET', 'PUT', 'DELETE'], // Allowed methods
   allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'Host', 'User-Agent', 'Accept', 'Accept-Encoding', 'Connection'], // Allowed headers
   credentials: true, // Enable credentials support
@@ -20,7 +20,7 @@ app.use(cors({
 const PORT = process.env.PORT;  
 
 // Middleware
-// app.use(bodyParser.json());  // Optional body parser, if needed
+app.use(bodyParser.json());  // Optional body parser, if needed
 
 // Serve static files (like images) from the uploads folder
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
