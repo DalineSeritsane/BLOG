@@ -30,18 +30,7 @@ const CreatePost = () => {
             });
     }, [backendUrl]);
     
-    // Fetch posts from backend 
-    useEffect(() => {
-        fetch(`${backendUrl}/posts`)
-            .then((response) => response.json())
-            .then((data) => {
-                setPosts(Array.isArray(data) ? data : []);
-            })
-            .catch((error) => {
-                console.error("Error fetching posts:", error);
-                setError("Error fetching posts.");
-            });
-    }, [backendUrl]);
+    
 
     // Add new post function 
     const handlePost = async () => {
@@ -51,7 +40,7 @@ const CreatePost = () => {
         } 
         try {
             const response = await fetch(`${backendUrl}/posts`, {
-                method: "POST",
+                meth//od: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
