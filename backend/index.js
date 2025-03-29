@@ -39,6 +39,11 @@ app.get('/posts', (req, res) => {
 });
 const PORT = process.env.PORT;  
 
+app.use((req, res, next) => {
+  res.status(404).json({ error: "Not Found" }); // Ensure JSON response for 404 errors
+});
+
+
 // Middleware
 // app.use(bodyParser.json());  // Optional body parser, if needed
 
