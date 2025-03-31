@@ -26,7 +26,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/write" element={<Write />} />
-        <Route path="/create-post" element={<CreatePost />} />
+        <Route path="/createpost" element={<CreatePost />} />
         <Route path="/setting" element={<Setting />} />
         <Route path="/post/:postid" element={<PostDetail />} />
         <Route path="/single" element={<Single />} />
