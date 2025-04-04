@@ -10,7 +10,10 @@ const app = express();
 // Enable CORS for frontend
 app.use(
   cors({
-    origin: "https://myblogappforcouples.vercel.app", 
+    origin: [
+      "https://myblogappforcouples.vercel.app",
+      "http://localhost:3000"
+    ],
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type,Authorization",
   })
