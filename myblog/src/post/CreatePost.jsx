@@ -103,7 +103,7 @@ const CreatePost = () => {
         <p>No posts yet</p>
       ) : (
         posts.map((post) => (
-          <div key={post._id}>
+          <div key={post._id || `${post.title}-${Math.random()}`}>
             <h4>{post.title}</h4>
             <p>
               <strong>By:</strong> {post.name} {post.surname}
