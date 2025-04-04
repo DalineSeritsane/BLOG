@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const router = express.Router(); 
 
 // POST /api/users/register - Register a new user
-router.post('api/register', async (req, res) => {
+router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
@@ -31,7 +31,7 @@ router.post('api/register', async (req, res) => {
 });
 
 // POST /api/users/login - Login a user
-router.post('/api/login', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
