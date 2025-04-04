@@ -72,7 +72,7 @@ const CreatePost = () => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
 
     try {
-      const response = await fetch(`${backendUrl}/api/${id}`, {
+      const response = await fetch(`${backendUrl}/posts/${id}`, {
         method: "DELETE",
       });
 
