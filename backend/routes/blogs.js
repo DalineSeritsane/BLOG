@@ -50,7 +50,7 @@ const upload = multer({
 }).single('image');
 
 // GET /api/blogs - Fetch all blog posts
-router.get('/posts', async (req, res) => {
+router.get('/api/posts', async (req, res) => {
   try {
     const posts = await dbQuery('SELECT * FROM posts');
     res.json(Array.isArray(posts) ? posts : []);
@@ -61,7 +61,7 @@ router.get('/posts', async (req, res) => {
 });
 
 // GET /api/posts/:id - Fetch a single post
-router.get('/posts/:id', async (req, res) => {
+router.get('/api/posts/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const post = await dbQuery('SELECT * FROM posts WHERE id = ?', [id]);
@@ -77,7 +77,7 @@ router.get('/posts/:id', async (req, res) => {
 
 
 // POST /api/blogs - Create a new blog post with Joi validation
-router.post('/posts',  async (req, res) => {
+router.post('/api/posts',  async (req, res) => {
   const { name, surname, title, content } = req.body;
  
   // Validate the request body using Joi schema
@@ -102,7 +102,7 @@ router.post('/posts',  async (req, res) => {
 });
 
 
-router.delete("/posts/id:", async (req,res) =>{
+router.delete("/api/posts/id:", async (req,res) =>{
   try{
     const id = parseInt(req.params.id);
 

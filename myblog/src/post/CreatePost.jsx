@@ -28,7 +28,7 @@ const CreatePost = () => {
       alert("All fields are required");
       return;
     }
-
+  
     try {
       const response = await fetch(`${backendUrl}/posts`, {
         method: "POST",
@@ -37,33 +37,42 @@ const CreatePost = () => {
         },
         body: JSON.stringify({ name, surname, title, content }),
       });
-
-      if (response.ok) {
-        const data = await response.json();
-        setPosts((prevPosts) => [
-          ...prevPosts,
-          { _id: data.postId, name, surname, title, content },
-        ]);
-        setName("");
-        setSurname("");
-        setTitle("");
-        setContent("");
-      } else {
-        const errorData = await response.json();
-        alert(errorData.message || "Failed to add post");
+  
+      // Check if the response is valid
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "Failed to add post");
       }
+  
+      const text = await response.text();
+  
+      if (!text) {
+        throw new Error("Empty response from the server");
+      }
+  
+      const data = JSON.parse(text);
+  
+      setPosts((prevPosts) => [
+        ...prevPosts,
+        { _id: data.postId, name, surname, title, content },
+      ]);
+      setName("");
+      setSurname("");
+      setTitle("");
+      setContent("");
     } catch (error) {
       console.error("Error adding post:", error);
-      alert("Error adding post. Please check your backend.");
+      alert(error.message || "Error adding post. Please check your backend.");
     }
   };
+  
 
   // Function to delete a post
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
 
     try {
-      const response = await fetch(`${backendUrl}/posts/${id}`, {
+      const response = await fetch(`${backendUrl}/api/${id}`, {
         method: "DELETE",
       });
 
