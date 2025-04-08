@@ -50,7 +50,7 @@ const Register = () => {
           onChange={(e) => setUsername(e.target.value)}
           required
         />
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">Email Address</label>
         <input
           id="email"
           type="email"
