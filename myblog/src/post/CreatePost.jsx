@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./createpost.css";
+import "./create.css";
 
 const CreatePost = () => {
   const [name, setName] = useState("");
