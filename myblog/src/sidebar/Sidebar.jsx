@@ -8,9 +8,9 @@ function Sidebar(){
             <div className="sidebarItem">
                 <span className="sidebarTitle">ABOUT ME</span>
                 <img src={blogSidebar} height="350px" alt='' />
-                <p className="sidebarP">Welocme to my couples travel blog. Where couples all around can explore beautiful places around the world! Connecting with your soulmate with breath taking views. These destinantions are where the heart is for new love.</p>
+                <p className="sidebarP">Welcome to my couples travel blog. Where couples all around can explore beautiful places around the world! Connecting with your soulmate with breath taking views. These places are where the heart is for new love.</p>
             </div>
-            <div classsName="sidebarItem">
+            <div className="sidebarItem">
             <span className="sidebarTitle">CATEGORIES</span>
             <ul className="sidebarList">
                 <li className="sidebarListItem">Las Vegas</li>
@@ -23,7 +23,7 @@ function Sidebar(){
 
             </div>
             <div className="sidebarItem">
-                <span className="sidebarTitle">FOLLOW US</span>
+                <span className="sidebarTitle">FOLLOW US!</span>
                 <div className="sidebarSocial">
         <i className="sidebarIcon fa-brands fa-facebook"></i>
         <i className="sidebarIcon fa-brands fa-square-twitter"></i>
